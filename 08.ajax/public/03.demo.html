@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<button id="btn01">发送请求</button>
+<br><br>
+<button id="btn02">获取JSON格式的数据</button>
+
+<script type="text/javascript">
+
+    var btn01 = document.getElementById("btn01");
+    var btn02 = document.getElementById("btn02");
+
+    btn02.onclick = function () {
+        //点击btn02，向服务器发送请求 testAJAX3
+        var xhr = new XMLHttpRequest();
+        xhr.open("get" , "/testAJAX3?t="+Math.random());
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState == 4 && xhr.status == 200){
+
+                //json格式的数据需要以xhr.responseText来获取
+                var json = xhr.responseText;
+
+                //使用时需要将JSON转换为对象
+                var obj = JSON.parse(json);
+
+                alert(obj.age);
+
+
+            }
+        };
+
+    };
+
+    btn01.onclick = function () {
+
+        //点击btn01，向服务器发送请求 testAJAX2
+        var xhr = new XMLHttpRequest();
+        xhr.open("get" , "/testAJAX2?t="+Math.random());
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState == 4 && xhr.status == 200){
+
+                /*
+                    xhr.responseXML 返回的是一个XML的Document对象，它和DOM类似
+                        如果要获取到xml中的数据，还需要对文档进行解析
+                 */
+                //alert(xhr.responseXML);
+                var xdom = xhr.responseXML;
+
+                //var nameEle = xdom.getElementsByTagName("name")[0];
+                //<name>孙悟空</name>
+                //alert(nameEle.firstChild.nodeValue);
+
+                alert(xdom.getElementsByTagName("address")[0].firstChild.nodeValue);
+            }
+        };
+
+
+    };
+
+
+</script>
+
+</body>
+</html>

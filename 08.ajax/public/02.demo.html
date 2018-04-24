@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript">
+
+        var a = 10;
+        /*
+            js的语句是一行一行按顺序语句，如果前边的语句执行时出现错误，则后边的语句全都不会执行
+
+            try...catch
+
+            try{
+                //有可能出错的语句
+            }catch(e){
+                //当try中的语句出错时，会执行catch中的语句
+                //在catch可以设置一些出错以后要执行的代码
+                //e表示出现的错误信息
+            }finally{
+                //finally中的代码总会执行
+            }
+
+
+         */
+        try{
+            alert(a);
+        }catch(e){
+            //alert("哈哈哈出错了~~~");
+            //对错误进行处理的代码
+            a = 20;
+            alert(a);
+
+            console.log(e);
+        }finally {
+            alert("finally中的代码总会执行~~~");
+        }
+
+
+        console.log("你好");
+
+        document.write("hello");
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

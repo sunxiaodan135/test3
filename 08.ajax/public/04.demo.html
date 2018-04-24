@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--引入jQuery-->
+    <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+
+<button id="btn01">发送AJAX请求</button>
+
+<script type="text/javascript">
+
+    $("#btn01").click(function () {
+
+        /*
+            $.ajax()
+                - 该方法是jQuery底层的操作AJAX的方法
+                    jQuery中所有AJAX的方法都是基于$.ajax()
+                - 一般情况下在开发时，很少使用$.ajax()，而是使用$.get() $.post() $.getJSON()
+                        一般都是有一些特殊需要时才使用
+                - $.ajax() 可以传递一个对象作为参数，对象中可以包含如下属性
+                    type: 请求的方法
+                    url: 发送请求的目标的地址
+                    data: 要发送的请求参数
+                    success: 响应返回以后调用的回调函数
+                            响应的结果将会以函数的参数的形式返回
+                     dataType: 期望的返回的数据的类型 , 如果不指定jQuery会自动对类型进行判断
+                         "json"
+                         "text"
+         */
+
+
+        /*$.ajax({
+            type: "get",
+            url: "testAJAX3",
+            data: "username=John&password=Boston",
+            dataType:"text",
+            success: function(data){
+                alert( data );
+            }
+        });*/
+
+        /*
+            $.get() 发送get请求
+                 get(url, [data], [callback], [type])
+                    url 请求的地址
+                    data 要发送的请求参数,可以是一个查询字符串，也可以是一个对象
+                    callback 数据加载成功以后的回调函数，数据将会以参数的形式返回
+                    type 期望返回的数据的类型，如果不指定会自动判断
+
+            $.post() 发送post请求
+                 post(url, [data], [callback], [type])
+         */
+        $.get("testAJAX3" , {username:"admin",password:"123123"} , function(data){
+            alert(data);
+        } ,"json");
+
+
+    });
+
+
+</script>
+
+</body>
+</html>

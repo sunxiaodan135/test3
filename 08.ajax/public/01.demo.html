@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript">
+
+        //自定义一个getXHR()函数用来获取xhr对象
+        function getXHR() {
+
+            try{
+                //主流浏览器使用的方式
+                return new XMLHttpRequest();
+            }catch(e){
+                try{
+                    //IE6
+                    return new ActiveXObject("Msxml2.XMLHTTP");
+                }catch(e){
+                    try{
+                        //IE5.5以下
+                        return new ActiveXObject("Microsoft.XMLHTTP");
+                    }catch(e){
+                        alert("你是火星来的吧，你的浏览器压根就不支持AJAX");
+                    }
+
+                }
+
+            }
+
+        }
+
+        window.onload = function () {
+
+            //点击btn01后，向testAJAX发送AJAX请求
+            var btn01 = document.getElementById("btn01");
+            var btn02 = document.getElementById("btn02");
+            var box1 = document.getElementById("box1");
+            btn01.onclick = function () {
+
+                /*
+                    在老版本的IE浏览器中，IE6及以下的浏览器，不支持 XMLHttpRequest 对象
+                        如果在这些浏览器中使用 XMLHttpRequest 会报错
+                        在老版本的IE中，需要使用ActiveXObject()来代替
+
+                 	目前主流浏览器都支持
+                     	var xhr = new XMLHttpRequest()
+                 	IE6支持的方式
+                     	var xhr = new ActiveXObject("Msxml2.XMLHTTP")
+                 	IE5.5以下支持的方式
+                     	var xhr = new ActiveXObject("Microsoft.XMLHTTP")
+
+                 */
+
+                //1.创建XMLHttpRequest对象
+                //var xhr = new XMLHttpRequest();
+                //var xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                var xhr = getXHR();
+
+
+                //2.设置请求信息
+                //open(method,url,async,user,password)
+                /*
+                    method 请求的方法，可以写 "get" "post"
+                     url  请求的地址 可以附加查询字符串
+                     async 布尔值，是否发送异步请求，默认true ，一般不传
+
+                     发送get请求时，有一些浏览器会使用缓存，
+                         也就是只会在第一次访问时发送，再次访问就不发了而是从缓存中加载数据
+                         浏览器的缓存是根据请求地址来保存的，只要地址改变就不会使用缓存了
+                 */
+                xhr.open("get","/testAJAX?username=admin&password=123123&t="+Math.random());
+
+                //3.发送请求
+                //send()可以传递一个请求体作为参数
+                xhr.send();
+
+                //4.接收响应
+                //xhr.responseText 接收文本格式的响应数据
+                //xhr.responseXML 接收xml格式的响应数据
+                //alert(xhr.responseText);
+
+                //xhr.readyState 可以用来查看当前请求的状态
+                /*
+                     0: 请求未初始化  (xhr对象刚刚建立)
+                     1: 服务器连接已建立 (xhr.open()调用完毕 xhr.send()可能调用完毕，但是请求尚未到达服务器)
+                     2: 请求已接收 (服务器已经收到了请求)
+                     3: 请求处理中 (服务器正在处理请求)
+                     4: 请求已完成，且响应已就绪
+                 */
+                //alert(xhr.readyState);
+                //监听readyState的改变
+                //onreadystatechange 会在readyState发生变化时触发
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState == 4 && xhr.status == 200){
+                        //alert(xhr.responseText);
+                        box1.innerHTML += "<li>"+xhr.responseText+"</li>";
+                    }
+                };
+
+
+            };
+
+
+
+
+            //使用ajax发送post请求
+            btn02.onclick = function () {
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("post" , "/testAJAX");
+
+                /*
+                    如果是post请求，并且需要通过请求体发送请求参数的，
+                         还必须设置如下一个请求头
+                             Content-Type: application/x-www-form-urlencoded
+                         如果不设置则请求体不会被服务器解析，服务器将无法读取请求体中的参数
+                 */
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+
+                xhr.send("username=tom&password=abc");
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState == 4 && xhr.status == 200){
+                        box1.innerHTML += "<li>"+xhr.responseText+"</li>";
+                    }
+                };
+
+            };
+
+
+        };
+
+
+    </script>
+</head>
+<body>
+
+<button id="btn01">发送AJAX请求</button>
+<button id="btn02">发送post请求</button>
+
+<ul id="box1">
+
+</ul>
+
+<form action="/testAJAX" method="post">
+    <input type="text" name="username">
+    <input type="text" name="password">
+    <input type="submit">
+</form>
+
+</body>
+</html>
